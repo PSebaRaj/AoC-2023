@@ -4,12 +4,18 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 struct num_t {
   int col;
   int row;
   int number;
   int order;
+};
+
+struct gear_t {
+  int numGears;
+  int gearRatio;
 };
 
 int main(int argc, char * argv[]) {
@@ -66,25 +72,40 @@ int main(int argc, char * argv[]) {
     }
   }
 
-  std::vector<int> parts;
+  std::unordered_map<int, gear_t> gears;
   for (const auto& n : numbers) {
-    bool still_searching = true;
 
-    for (int row = n.row - 1; (row <= n.row + 1) && still_searching; row++) {
+    for (int row = n.row - 1; (row <= n.row + 1); row++) {
       if (row < 0 || row >= map.size()) continue;
 
       const int col_increment = (row == n.row) ? n.order + 1 : 1;
-      for (int col = n.col - 1; (col <= n.col + n.order) && still_searching; col += col_increment) {
+      for (int col = n.col - 1; (col <= n.col + n.order); col += col_increment) {
         if (col < 0 || col >= map[row].size()) continue;
-        if (map[row][col] != '.' && !(map[row][col] >= '0' && map[row][col] <= '9')) {
-          still_searching = false;
-          parts.push_back(n.number);
+
+        if (map[row][col] == '*') {
+          const int id = map[0].size() * row + col; // assumes each row is the same length
+													//
+          if (gears.find(id) == gears.end()) {
+            gear_t g;
+            g.numGears = 1;
+			g.gearRatio = n.number;
+            gears[id] = g;
+          } else {
+            gears[id].numGears++;
+			gears[id].gearRatio *= n.number;
+          }
         }
       }
     }
   }
 
-  const auto total = std::accumulate(std::begin(parts), std::end(parts), 0);
+  int total = 0;
+  for (const auto& [id, gear] : gears) {
+    if (gear.numGears == 2) {
+	  total += gear.gearRatio;
+    }
+  }
+
   std::cout << total << std::endl;
   return 0;
 }
