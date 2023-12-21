@@ -9,29 +9,33 @@
 #include <numeric>
 #include <cmath>
 
-int copiesNumber(const std::vector<std::set<int>> &s1, const std::vector<std::set<int>> &s2, int selL, int selH) {
+int copiesNumber(const std::vector<std::set<int>> &s1, const std::vector<std::set<int>> &s2, int selL, int selH)
+{
 	int res = 0;
 
-	for (int s=selL; s<=selH; s++) {
+	for (int s = selL; s <= selH; s++)
+	{
 		std::set<int> intersection;
-		std::set_intersection(s1[s-1].begin(), s1[s-1].end(), s2[s-1].begin(), s2[s-1].end(),
-			std::inserter(intersection, intersection.begin()));
+		std::set_intersection(s1[s - 1].begin(), s1[s - 1].end(), s2[s - 1].begin(), s2[s - 1].end(),
+							  std::inserter(intersection, intersection.begin()));
 
 		res += 1;
-		res += copiesNumber(s1, s2, s+1, s+intersection.size());
+		res += copiesNumber(s1, s2, s + 1, s + intersection.size());
 	}
 
 	return res;
 }
 
-int main() {
+int main()
+{
 	std::ifstream in("input.txt");
 	std::vector<std::string> input;
 	std::vector<std::set<int>> s1, s2;
 	std::string line;
 	int lines = 0;
 
-	while (getline(in, line)) {
+	while (getline(in, line))
+	{
 		std::smatch m;
 		regex_match(line, m, std::regex("^Card +(\\d)+: ([\\d ]+) \\| ([\\d ]+)$"));
 

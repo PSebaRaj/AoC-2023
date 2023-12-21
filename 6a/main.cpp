@@ -7,17 +7,21 @@
 
 using Race = std::pair<int, int>;
 
-inline auto distance(int buttonCharge, int time) {
+inline auto distance(int buttonCharge, int time)
+{
 	return buttonCharge * time;
 }
 
-int win_race(std::vector<Race> races) {
+int win_race(std::vector<Race> races)
+{
 	int res = 1;
 
-	for (const auto &[totalTime, recordDistance] : races) {
+	for (const auto &[totalTime, recordDistance] : races)
+	{
 		int count = 0;
-		for (int chargeTime = 0; chargeTime < totalTime; chargeTime++) {
-		count += distance(chargeTime, totalTime - chargeTime) > recordDistance ? 1 : 0;
+		for (int chargeTime = 0; chargeTime < totalTime; chargeTime++)
+		{
+			count += distance(chargeTime, totalTime - chargeTime) > recordDistance ? 1 : 0;
 		}
 		res *= count;
 	}
@@ -25,7 +29,8 @@ int win_race(std::vector<Race> races) {
 	return res;
 }
 
-int main() {
+int main()
+{
 	std::ifstream in("input.txt");
 
 	std::string time_buf;
@@ -42,13 +47,15 @@ int main() {
 
 	in.close();
 
-	if (not ok1 || not ok2) {
+	if (not ok1 || not ok2)
+	{
 		return 1;
 	}
 
 	std::vector<Race> v;
 	int time, dist;
-	while (sstream_time >> time and sstream_dist >> dist) {
+	while (sstream_time >> time and sstream_dist >> dist)
+	{
 		v.emplace_back(std::make_pair(time, dist));
 	}
 

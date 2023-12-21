@@ -9,13 +9,15 @@
 #include <numeric>
 #include <cmath>
 
-int main() {
+int main()
+{
 	std::ifstream in("input.txt");
 	std::vector<std::string> input;
 	std::string line;
 	int res = 0;
 
-	while (getline(in, line)) {
+	while (getline(in, line))
+	{
 		std::smatch m;
 		regex_match(line, m, std::regex("^Card +(\\d)+: ([\\d ]+) \\| ([\\d ]+)$"));
 
@@ -26,9 +28,10 @@ int main() {
 
 		std::set<int> intersection;
 		std::set_intersection(s1.begin(), s1.end(), s2.begin(), s2.end(),
-			std::inserter(intersection, intersection.begin()));
+							  std::inserter(intersection, intersection.begin()));
 
-		if (not intersection.empty()) res += pow(2, intersection.size()-1);
+		if (not intersection.empty())
+			res += pow(2, intersection.size() - 1);
 	}
 
 	in.close();
